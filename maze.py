@@ -31,7 +31,6 @@ class Maze:
         self._reset_cells_visited()
         self._solve()
         
-
     def _create_cells(self):
         for i in range(self._num_cols):
             col_cells = []
@@ -134,5 +133,33 @@ class Maze:
                 return True
             else:
                 self._cells[i][j].draw_move(self._cells[to_cell_x][to_cell_y],undo= True)
-                
+        return False
+    
+    def _solve_bfs(self):
+        
+        to_visit = [(0,0)]
+        while to_visit:
+            self._animate()
+            neighbors = []
+            i,j = to_visit.pop(0)
+            self._cells[i][j].visited = True
+            
+            
+            if not (i == len(self._cells) -1 and j ==len(self._cells[0])-1) and not self._cells[i][j].has_bottom_wall and not self._cells[i][j+1].visited:
+                to_visit.append((i,j+1))
+                neighbors.append((i,j+1))
+            if not (i ==0 and j == 0 ) and not self._cells[i][j].has_top_wall and not self._cells[i][j-1].visited:
+                to_visit.append((i,j-1))
+                neighbors.append((i,j-1))
+            if not self._cells[i][j].has_right_wall and not self._cells[i+1][j].visited:
+                to_visit.append((i+1,j))
+                neighbors.append((i+1,j))
+            if not self._cells[i][j].has_left_wall and not self._cells[i-1][j].visited:
+                to_visit.append((i-1,j)) 
+                neighbors.append((i-1,j)) 
+            for neighbor in neighbors:
+                to_i,to_j = neighbor
+                self._cells[i][j].draw_move(self._cells[to_i][to_j])
+                if to_i == len(self._cells)-1 and to_j == len(self._cells[0])-1:
+                    return True
         return False
