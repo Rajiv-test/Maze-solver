@@ -28,6 +28,7 @@ class Maze:
         self._create_cells()
         self._break_entrance_and_exit()
         self._break_cells_r(0,0)
+        self._reset_cells_visited()
 
     def _create_cells(self):
         for i in range(self._num_cols):
@@ -96,6 +97,8 @@ class Maze:
             elif i2-i1 == -1:
                 self._cells[i1][j1].has_left_wall = False
                 self._cells[i2][j2].has_right_wall = False
-        
-        
-        
+                
+    def _reset_cells_visited(self):
+        for i in range(len(self._cells)):
+            for j in range(len(self._cells[0])):
+                self._cells[i][j].visited = False
